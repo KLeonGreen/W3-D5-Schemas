@@ -1,5 +1,4 @@
 import express from "express";
-import q2m from "query-to-mongo";
 import userModel from "./userModel.js";
 import productModel from "../product/model.js";
 import cartModel from "./cartModel.js";

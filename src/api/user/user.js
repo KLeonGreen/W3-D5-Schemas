@@ -27,8 +27,19 @@ userRouter.post("/:id/cart", async (request, response, next) => {
     const product = await productModel.findById(productId);
     //console.log(product);
 
-    const isTheProductInTheCart = await cartModel.findOne({ user: request.params.id, status: "active", "product.productId": productId });
+    const isTheProductInTheCart = await cartModel.findOne({ user: request.params.id, status: "Active", "product.productId": productId });
     if (isTheProductInTheCart) {
+      const updatedCart = await cartModel.findOneAndUpdate(
+        {
+          user: request.params.id,
+          status: "Active",
+          "product.productId": productId,
+        },
+        { $inc: { "product.$.quantity": quantity } },
+        { new: true, runValidators: true }
+      );
+
+      response.send(updatedCart);
     } else {
       const cartUpdate = await cartModel.findOneAndUpdate(
         { user: request.params.id, status: "Active" },
